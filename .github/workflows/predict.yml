@@ -1,0 +1,31 @@
+name: SportLens predictions
+on:
+  schedule:
+    - cron: '0 15 * * *'   # 09:00 Monterrey
+    - cron: '0 2 * * *'    # 20:00 Monterrey
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (write nothing)'
+        type: boolean
+        default: true
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Predict
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            python predict_live.py --horizon-days 3 --dry-run
+          else
+            python predict_live.py --horizon-days 3
+          fi
