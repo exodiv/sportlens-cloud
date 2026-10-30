@@ -15,6 +15,8 @@ jobs:
   predict:
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -26,8 +28,22 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
+          set -o pipefail
+          {
           if [ "${{ github.event_name }}" = "push" ] || { [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; }; then
             python predict_live.py --horizon-days 3 --dry-run
           else
             python predict_live.py --horizon-days 3
           fi
+          } 2>&1 | sed -E 's#postgres(ql)?://[^ ]+#postgresql://<hidden>#g' | tee run.log
+      - name: Save log to branch
+        if: always()
+        run: |
+          git config user.name github-actions && git config user.email actions@github.com
+          git checkout --orphan run-logs
+          git rm -rfq --cached . >/dev/null 2>&1 || true
+          mkdir -p /tmp/keep && cp run.log /tmp/keep/ 2>/dev/null || echo "no log" > /tmp/keep/run.log
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp /tmp/keep/run.log last_run.log
+          git add last_run.log && git commit -qm "run log ${{ github.run_id }}"
+          git push -f origin run-logs
