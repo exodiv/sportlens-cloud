@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/home/runner/work/sportlens-cloud/sportlens-cloud/predict_live.py", line 160, in <module>
+    main()
+  File "/home/runner/work/sportlens-cloud/sportlens-cloud/predict_live.py", line 95, in main
+    df = ex.load_db(url, live=True)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sportlens-cloud/sportlens-cloud/experiments_v2.py", line 87, in load_db
+    with psycopg.connect(url) as conn:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/psycopg/connection.py", line 134, in connect
+    raise new_ex.with_traceback(None)
+psycopg.OperationalError: connection failed: connection to server at "44.208.221.186", port 5432 failed: FATAL:  (ENOTFOUND) tenant/user postgres.dokcguhqnvmwlgngvuxx not found
+connection to server at "44.208.221.186", port 5432 failed: FATAL:  (ENOTFOUND) tenant/user postgres.dokcguhqnvmwlgngvuxx not found
+Multiple connection attempts failed. All failures were:
+- host: 'aws-0-us-east-1.pooler.supabase.com', port: '5432', hostaddr: '44.216.29.125': connection failed: connection to server at "44.216.29.125", port 5432 failed: FATAL:  (ENOTFOUND) tenant/user postgres.dokcguhqnvmwlgngvuxx not found
+connection to server at "44.216.29.125", port 5432 failed: FATAL:  (ENOTFOUND) tenant/user postgres.dokcguhqnvmwlgngvuxx not found
+- host: 'aws-0-us-east-1.pooler.supabase.com', port: '5432', hostaddr: '52.45.94.125': connection failed: connection to server at "52.45.94.125", port 5432 failed: FATAL:  (ENOTFOUND) tenant/user postgres.dokcguhqnvmwlgngvuxx not found
+connection to server at "52.45.94.125", port 5432 failed: FATAL:  (ENOTFOUND) tenant/user postgres.dokcguhqnvmwlgngvuxx not found
+- host: 'aws-0-us-east-1.pooler.supabase.com', port: '5432', hostaddr: '44.208.221.186': connection failed: connection to server at "44.208.221.186", port 5432 failed: FATAL:  (ENOTFOUND) tenant/user postgres.dokcguhqnvmwlgngvuxx not found
+connection to server at "44.208.221.186", port 5432 failed: FATAL:  (ENOTFOUND) tenant/user postgres.dokcguhqnvmwlgngvuxx not found
