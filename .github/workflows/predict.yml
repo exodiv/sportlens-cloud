@@ -1,10 +1,6 @@
 name: SportLens predictions
 on:
-  push:
-    branches: [main]
-  schedule:
-    - cron: '0 15 * * *'   # 09:00 Monterrey
-    - cron: '0 2 * * *'    # 20:00 Monterrey
+  # PAUSED: push + schedule triggers removed (manual run only)
   workflow_dispatch:
     inputs:
       dry_run:
